@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Your charity</title>
+</head>
+<body background="https://ak8.picdn.net/shutterstock/videos/6650708/thumb/1.jpg">
+
+<form name="myForm" action="HomeServlet" method="post">
+<h2>Money Transfer Page</h2>
+<br/>
+<p>Please enter Receiver's Account Number and Amount to transfer Money!!!</p>
+<br/>
+Receiver's Account Number : <input type="text" name="accontno"/>
+Money Amount : <input type="text" name="amount"/>
+<br/>
+<input type="submit" value="Transfer Money"/>
+</form>
+<script type="text/javascript">
+function callAjax(url, callback){
+    var xmlhttp;
+    // compatible with IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.responseType = 'json';
+    xmlhttp.onreadystatechange = function(){
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            callback(xmlhttp.response);
+        }
+    }
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function myCallback(resp){
+	console.log(resp["CSRF_key"]);
+	
+	var form = document.forms['myForm'];
+	   //form.action = 'put your url here';
+	   var el = document.createElement("input");
+	   el.type = "hidden";
+	   el.name = "myHiddenField";
+	   el.value = resp["CSRF_key"];
+	   form.appendChild(el);
+}
+
+callAjax("CSRFProvider", myCallback);
+</script>
+</body>
+</html>
